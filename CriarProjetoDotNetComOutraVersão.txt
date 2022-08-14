@@ -1,0 +1,1 @@
+https://stackoverflow.com/questions/42077229/switch-between-dotnet-core-sdk-versions
