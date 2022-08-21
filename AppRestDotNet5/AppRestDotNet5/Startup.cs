@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 
 namespace AppRestDotNet5
 {
@@ -41,6 +42,15 @@ namespace AppRestDotNet5
             {
                 MigrateDatabase(connection);
             }
+
+            services.AddMvc(options =>
+            {
+                options.RespectBrowserAcceptHeader = true;
+
+                options.FormatterMappings.SetMediaTypeMappingForFormat("xml", "application/xml");
+                options.FormatterMappings.SetMediaTypeMappingForFormat("json", "application/json");
+            })
+            .AddXmlSerializerFormatters();
 
             //Versioning API
             services.AddApiVersioning();
