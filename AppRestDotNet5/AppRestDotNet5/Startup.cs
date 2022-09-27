@@ -1,5 +1,7 @@
 using AppRestDotNet5.Business;
 using AppRestDotNet5.Business.Implementations;
+using AppRestDotNet5.Hypermedia.Enricher;
+using AppRestDotNet5.Hypermedia.Filters;
 using AppRestDotNet5.Model.Context;
 using AppRestDotNet5.Repository.Generic;
 using Microsoft.AspNetCore.Builder;
@@ -52,6 +54,12 @@ namespace AppRestDotNet5
             })
             .AddXmlSerializerFormatters();
 
+            var filterOptions = new HyperMediaFilterOptions();
+            filterOptions.ContentResponseEnricherList.Add(new PersonEnricher());
+            filterOptions.ContentResponseEnricherList.Add(new BookEnricher());
+
+            services.AddSingleton(filterOptions);
+
             //Versioning API
             services.AddApiVersioning();
 
@@ -79,6 +87,7 @@ namespace AppRestDotNet5
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapControllerRoute("DefaultApi", "{controller=values}/{id?}");
             });
         }
 
